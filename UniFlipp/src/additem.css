@@ -1,0 +1,67 @@
+.App {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 40%;
+}
+
+.container2 {
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #333; /* Slightly darker text color for better contrast */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  color: #444; /* Adjusted text color for better readability */
+}
+
+label {
+  margin-bottom: 10px; /* Increased margin for better spacing */
+  color: #666;
+}
+
+input[type="text"],
+input[type="number"] {
+  padding: 12px;
+  margin-bottom: 20px; /* Increased margin for better spacing */
+  border: 1px solid #ddd; /* Lighter border color */
+  border-radius: 8px;
+  transition: border-color 0.3s ease;
+  width: 100%;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+  border-color: #007bff;
+  outline: none;
+
+}
+
+button {
+  padding: 12px 24px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+button:active {
+  background-color: #00468c;
+}
+
+  
