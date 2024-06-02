@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import './Chat.css';
-import logo from '../searchIcon.png';
+import logo from './searchIcon.png';
 
 
 const CONNECTION_PORT = 'http://localhost:1337';
