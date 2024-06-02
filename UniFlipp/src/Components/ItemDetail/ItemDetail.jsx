@@ -1,7 +1,7 @@
 // ItemDetails.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Chat from './Chat';
+import Chat from '../Chat/Chat';
 
 
 const ItemDetail = () => {

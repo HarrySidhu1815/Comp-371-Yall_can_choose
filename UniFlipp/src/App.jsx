@@ -3,15 +3,15 @@ import React from 'react'
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import './App.css'
-import HomePage from './homePage'
-import SearchPage from './searchPage'
-import WhoAreWePage from './WhoAreWePage';
-import GetInvolvedPage from './GetInvolvedPage';
-import SignUpPage from './SignUpPage';
-import Login from './Login'
-import AddItem from './AddItem'
-import Logout from './Logout'
-import ItemDetails from './ItemDetail'
+import HomePage from './Components/HomePage/homePage'
+import SearchPage from './Components/SearchPage/searchPage'
+import WhoAreWePage from './Components/WhoAreWe/WhoAreWePage';
+import GetInvolvedPage from './Components/GetInvolved/GetInvolvedPage';
+import SignUpPage from './Components/SignUp/SignUpPage';
+import Login from './Components/Login/Login'
+import AddItem from './Components/AddItem/AddItem'
+import Logout from './Components/LogOut/Logout'
+import ItemDetails from './Components/ItemDetail/ItemDetail'
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false)
@@ -24,7 +24,7 @@ function App() {
       <div>
         
           <header>
-          <img className='logo' src="/src/logoimage.png" alt="Logo" width="100" height="50" />
+          <img className='logo' src="/src/assets/logoimage.png" alt="Logo" width="100" height="50" />
           <h3>UniFlip</h3>
           </header>
           <div id="main">            
@@ -102,9 +102,9 @@ function App() {
         </div>
         <footer>
             <ul id="footer">
-              <li><a href="/src/aboutus.html">2024 Uniflip</a></li>
-              <li><a href="/src/privacy.html">Privacy Policy</a></li>
-              <li><a href="/src/termsofservice.html">Terms of Service</a></li>
+              <li><a href="/src/Components/About/aboutus.html">2024 Uniflip</a></li>
+              <li><a href="/src/Components/Privacy/privacy.html">Privacy Policy</a></li>
+              <li><a href="/src/Components/TermsofService/termsofservice.html">Terms of Service</a></li>
             </ul>
         </footer>
       </div>    
