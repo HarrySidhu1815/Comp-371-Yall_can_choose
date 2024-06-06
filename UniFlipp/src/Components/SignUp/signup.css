@@ -1,5 +1,6 @@
 .container5 {
-  width: 400px;
+  width: 35vw;
+  min-width: 21rem;
   margin: 0 auto; 
   border-radius: 8px;
   text-align: center; 
