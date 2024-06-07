@@ -47,7 +47,9 @@ header {
   text-align: center;
   align-items: center;
   justify-content: center;
-
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 header > img {
@@ -93,8 +95,11 @@ footer ul li {
 
 nav {
   /* transition: 0.3s ease-in-out; */
-  position: relative;
   padding-top: 1em;
+  position: sticky;
+  top: 7vh;
+  z-index: 10;
+  height: 93vh;
 }
 
 .Logoutbtn {
