@@ -1,11 +1,13 @@
 .App {
   font-family: Arial, sans-serif;
-  margin: 0 auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 40%;
+  width: 35vw;
+  min-width: 21rem;
+  margin: 0 auto;
+  text-align: center; 
 }
 
 .container2 {
@@ -27,6 +29,7 @@ form {
 label {
   margin-bottom: 10px; /* Increased margin for better spacing */
   color: #666;
+  text-align: left;
 }
 
 input[type="text"],

@@ -5,10 +5,10 @@ import Chat from '../Chat/Chat';
 
 
 const ItemDetail = () => {
-    const { id } = useParams();
-    const [item, setItem] = useState(null);
-    const [currentUser, setCurrentUser] = useState(null);
-    const [currentName, setCurrentName] = useState(null);
+  const { id } = useParams();
+  const [item, setItem] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentName, setCurrentName] = useState(null);
 
   useEffect(() => {
     console.log(id)
@@ -31,7 +31,7 @@ const ItemDetail = () => {
         console.error('Error fetching item:', error);
       }
     };
-    
+
     fetchItem();
   }, [id]);
 
@@ -41,29 +41,29 @@ const ItemDetail = () => {
 
   return (
     <>
-    <div className="item-details-container">
-  <div className="item-details-header">
-    <h2>{item.itemType}</h2>
-  </div>
-  <div className="item-details-content">
-  <div  className="item-image">
-  <img src={`http://localhost:5173/src/images/${item.image}`} alt="Item"/>
-  </div>
-    
-    <div className="item-info">
-      <p><span className='headings'>Type: </span>{item.itemType}</p>
-      <p><span className='headings'>Description: </span><br/>{item.description}</p>
-      <p><span className='headings'>Price: </span>${item.price}</p>
-      <p><span className='headings'>Location: </span>{item.location}</p>
-    </div>
-  </div>
-<div className='chat-itemPage'>
-<h2>Chat with the interested Buyer!</h2>
-{currentUser ? <Chat user={item.user} loggedUser={currentUser} userName={currentName} />: 
-<p>Please Login to chat with the onwer.</p>}
-</div>
-</div>
-</>
+      <div className="item-details-container">
+        <div className="item-details-header">
+          <h2>{item.itemType}</h2>
+        </div>
+        <div className="item-details-content">
+          <div className="item-image">
+            <img src={`http://localhost:5173/src/images/${item.image}`} alt="Item" />
+          </div>
+
+          <div className="item-info">
+            <p><span className='headings'>Type: </span>{item.itemType}</p>
+            <p><span className='headings'>Description: </span><br />{item.description}</p>
+            <p><span className='headings'>Price: </span>${item.price}</p>
+            <p><span className='headings'>Location: </span>{item.location}</p>
+          </div>
+        </div>
+        <div className='chat-itemPage'>
+          <h2>Chat with the interested Buyer!</h2>
+          {currentUser ? <Chat user={item.user} loggedUser={currentUser} userName={currentName} /> :
+            <p>Please Login to chat with the onwer.</p>}
+        </div>
+      </div>
+    </>
   );
 };
 
