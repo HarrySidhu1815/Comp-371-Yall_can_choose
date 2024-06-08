@@ -30,13 +30,13 @@ function App() {
           <h3>UniFlip</h3>
           <span className='mobMenu material-symbols-rounded menuicon1' alt='Menu' onClick={() => setShowMenu(!showMenu)}>menu </span>
           <div className='navMenu' style={{ 'display': showMenu ? 'flex' : 'none' }}>
-            <Link activeClass='active' to='/home' onClick={() => setShowMenu(false)} className='listItem'>Home</Link>
-            <Link activeClass='active' to='/search'onClick={() => setShowMenu(false)} className='listItem'>Search</Link>
-            <Link activeClass='active' to='/whoarewe' onClick={() => setShowMenu(false)} className='listItem'>Who are we?</Link>
-            <Link activeClass='active' to='/signup' onClick={() => setShowMenu(false)} className='listItem'>Sign Up</Link>
-            <Link activeClass='active' to='/login' onClick={() => setShowMenu(false)} className='listItem'>Login</Link>
-            <Link activeClass='active' to='/add' onClick={() => setShowMenu(false)} className='listItem'>AddItem</Link>
-            <Link activeClass='active' to='/Logout' onClick={() => setShowMenu(false)} className='listItem'>LogOut</Link>
+            <Link to='/home' onClick={() => setShowMenu(false)} className='listItem'>Home</Link>
+            <Link to='/search'onClick={() => setShowMenu(false)} className='listItem'>Search</Link>
+            <Link to='/whoarewe' onClick={() => setShowMenu(false)} className='listItem'>Who are we?</Link>
+            <Link to='/signup' onClick={() => setShowMenu(false)} className='listItem'>Sign Up</Link>
+            <Link to='/login' onClick={() => setShowMenu(false)} className='listItem'>Login</Link>
+            <Link to='/add' onClick={() => setShowMenu(false)} className='listItem'>AddItem</Link>
+            <Link to='/Logout' onClick={() => setShowMenu(false)} className='listItem'>LogOut</Link>
           </div>
         </header>
         <div id="main">

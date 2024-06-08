@@ -263,8 +263,8 @@ app.post('/api/retrieve-messages', async (req, res) => {
 
 app.post('/api/retrieve-contacts', async (req, res) => {
   try {
-    const currentUserEmail = req.body.username;
-
+    const currentUserEmail = req.body.currentName;
+    console.log(currentUserEmail)
     // Retrieve messages from MongoDB
     const contacts = await Message.aggregate([
       {
@@ -274,7 +274,7 @@ app.post('/api/retrieve-contacts', async (req, res) => {
       },
       {
         $group: {
-          _id: "$recipientEmail"
+          _id: "$senderEmail"
         }
       },
       {
@@ -296,6 +296,7 @@ app.post('/api/retrieve-contacts', async (req, res) => {
         }
       }
     ]);
+    console.log(contacts)
     
     res.status(200).json({ contacts });
   } catch (error) {

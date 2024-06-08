@@ -11,7 +11,6 @@ const ItemDetail = () => {
   const [currentName, setCurrentName] = useState(null);
 
   useEffect(() => {
-    console.log(id)
     const fetchItem = async () => {
       try {
         const response = await fetch(`http://localhost:1337/item/${id}`, {
@@ -23,7 +22,6 @@ const ItemDetail = () => {
           throw new Error('Failed to fetch item');
         }
         const data = await response.json();
-        console.log(data)
         setItem(data.items);
         setCurrentUser(data.currentUser)
         setCurrentName(data.userName)

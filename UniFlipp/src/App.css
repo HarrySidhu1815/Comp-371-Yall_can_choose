@@ -453,6 +453,9 @@ nav {
     justify-content: center;
     align-items: center;
   }
+  .contacts{
+    display: none;
+  }
 }
 
 

@@ -11,7 +11,7 @@ function Chat({ user, loggedUser }) {
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState(user);
     const [owner, setOwner] = useState();
-    const [currentName, setcurrentName] = useState();
+    const [currentName, setcurrentName] = useState(loggedUser);
     const [contacts, setContacts] = useState([])
 
     fetch('http://localhost:1337/api/find-user-name', {
@@ -105,7 +105,7 @@ function Chat({ user, loggedUser }) {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        username
+                        currentName
                     }),
                 });
                 const data = response.json()
@@ -124,7 +124,7 @@ function Chat({ user, loggedUser }) {
         // Call the function to fetch messages when the component mounts
         fetchMessages();
         fetchContacts();
-    }, currentName);
+    }, [username]);
 
     const sendMessage = () => {
         const messageInput = document.getElementById('message-input');
@@ -162,8 +162,7 @@ function Chat({ user, loggedUser }) {
         messageContainer.scrollTop = messageContainer.scrollHeight - messageContainer.clientHeight;
     };
     const handleContactClick = (clickedUser) => {
-        console.log(clickedUser)
-        setcurrentName(clickedUser)
+        setUsername(clickedUser)
     }
     const handleMessageSend = () => {
         const message = document.getElementById('message-input').value;
@@ -187,7 +186,8 @@ function Chat({ user, loggedUser }) {
         <div className="chatwrap">
             <div className="chatapp">
                 <div className="app">
-                    <div className="left-column-chat-list">
+                    {user == loggedUser ? (<>
+                        <div className="left-column-chat-list">
                         <div className="chat-search">
                             <input type="text" placeholder="Search conversation..." />
                             <button id="send search">
@@ -195,15 +195,16 @@ function Chat({ user, loggedUser }) {
                             </button>
                         </div>
                         <div className="chat-list">
-                            <div className="block">
+                            <div  className='contactList'>
                                 {contacts.map((contact, index) => (
-                                    <div key={index} className='contacts' onClick={() => handleContactClick(contact.recipientEmail)}>
-                                        <div>{contact.name}</div>
-                                    </div>
+                                    
+                                        <div key={index} className='contacts' onClick={() => handleContactClick(contact.recipientEmail)}>{contact.name}</div>
+                    
                                 ))}
-                            </div>
+                                </div>
                         </div>
                     </div>
+                    </>) : <></>}
                     <div className="screen chat-screen active">
                         <div className="header">
                             <div className="logo">Messages Chat</div>
