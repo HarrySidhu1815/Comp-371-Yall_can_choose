@@ -261,6 +261,49 @@ app.post('/api/retrieve-messages', async (req, res) => {
   }
 });
 
+app.post('/api/retrieve-contacts', async (req, res) => {
+  try {
+    const currentUserEmail = req.body.username;
+
+    // Retrieve messages from MongoDB
+    const contacts = await Message.aggregate([
+      {
+        $match: {
+          recipientEmail: currentUserEmail
+        }
+      },
+      {
+        $group: {
+          _id: "$recipientEmail"
+        }
+      },
+      {
+        $lookup: {
+          from: 'user-data',
+          localField: '_id',
+          foreignField: 'email',
+          as: 'userDetails'
+        }
+      },
+      {
+        $unwind: '$userDetails'
+      },
+      {
+        $project: {
+          recipientEmail: '$_id',
+          name: '$userDetails.name',
+          _id: 0
+        }
+      }
+    ]);
+    
+    res.status(200).json({ contacts });
+  } catch (error) {
+    console.error('Error retrieving messages:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Route to find user's name given email
 app.post('/api/find-user-name', async (req, res) => {
   try {

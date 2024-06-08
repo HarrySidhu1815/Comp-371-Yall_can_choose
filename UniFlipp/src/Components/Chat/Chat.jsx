@@ -7,11 +7,12 @@ import logo from './searchIcon.png';
 const CONNECTION_PORT = 'http://localhost:1337';
 let socket;
 
-function Chat({user, loggedUser}) {
+function Chat({ user, loggedUser }) {
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState(user);
     const [owner, setOwner] = useState();
-    const [currentName, setcurrentName] = useState(loggedUser);
+    const [currentName, setcurrentName] = useState();
+    const [contacts, setContacts] = useState([])
 
     fetch('http://localhost:1337/api/find-user-name', {
         method: 'POST',
@@ -20,21 +21,21 @@ function Chat({user, loggedUser}) {
         },
         body: JSON.stringify({ email: username })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        setOwner(data.name)
-    })
-    .catch(error => {
-        console.error('Error fetching user name:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            setOwner(data.name)
+        })
+        .catch(error => {
+            console.error('Error fetching user name:', error);
+        });
 
-    useEffect(()=> {
-    
+    useEffect(() => {
+
         socket = io(CONNECTION_PORT);
         socket.on('connect', () => {
             console.log('Connected to server');
@@ -76,17 +77,17 @@ function Chat({user, loggedUser}) {
                     }),
                 });
                 const data = response.json()
-                .then(result => {
-                    const messages_array = result.messages
-                    const new_array = [];
-                    messages_array.map(message => {
-                        new_array.push({
-                            user: message.senderEmail,
-                            text: message.message
+                    .then(result => {
+                        const messages_array = result.messages
+                        const new_array = [];
+                        messages_array.map(message => {
+                            new_array.push({
+                                user: message.senderEmail,
+                                text: message.message
+                            })
                         })
+                        setMessages(new_array)
                     })
-                    setMessages(new_array)
-                })
                 // Update state with the messages received from the server
                 // setMessages(result.messages)
             } catch (error) {
@@ -94,16 +95,43 @@ function Chat({user, loggedUser}) {
             }
         };
 
+        const fetchContacts = async () => {
+            try {
+                // Make a request to retrieve messages
+                const response = await fetch('http://localhost:1337/api/retrieve-contacts', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username
+                    }),
+                });
+                const data = response.json()
+                    .then(result => {
+                        console.log(result)
+                        const contacts_array = result.contacts
+                        setContacts(contacts_array)
+                    })
+                // Update state with the messages received from the server
+                // setMessages(result.messages)
+            } catch (error) {
+                console.error('Error retrieving messages:', error);
+            }
+        }
+
         // Call the function to fetch messages when the component mounts
         fetchMessages();
-    }, []);
+        fetchContacts();
+    }, currentName);
 
     const sendMessage = () => {
         const messageInput = document.getElementById('message-input');
         const message = messageInput.value.trim();
-        
+
         if (message.length === 0) return;
-        
+
         renderMessage('my', {
             username: currentName,
             text: message
@@ -114,13 +142,13 @@ function Chat({user, loggedUser}) {
             username: username,
             text: message
         });
-        
+
         messageInput.value = '';
     };
 
     const renderMessage = (type, message) => {
         const messageContainer = document.querySelector('.chat-screen .messages');
-        
+
         let el = document.createElement('div');
         el.className = `message ${type === 'my' ? 'my-message' : 'other-message'}`;
         el.innerHTML = `
@@ -129,11 +157,14 @@ function Chat({user, loggedUser}) {
                 <div class="text">${message.text}</div>
             </div>
         `;
-        
+
         messageContainer.appendChild(el);
         messageContainer.scrollTop = messageContainer.scrollHeight - messageContainer.clientHeight;
     };
-
+    const handleContactClick = (clickedUser) => {
+        console.log(clickedUser)
+        setcurrentName(clickedUser)
+    }
     const handleMessageSend = () => {
         const message = document.getElementById('message-input').value;
         if (message.trim().length > 0) {
@@ -142,7 +173,7 @@ function Chat({user, loggedUser}) {
     };
 
     const handleSocketMessage = (message) => {
-        setMessages(prevMessages => {[...prevMessages, message]});
+        setMessages(prevMessages => { [...prevMessages, message] });
     };
 
     useEffect(() => {
@@ -155,8 +186,8 @@ function Chat({user, loggedUser}) {
     return (
         <div className="chatwrap">
             <div className="chatapp">
-                {/* <div className="app"> */}
-                    {/* <div className="left-column-chat-list">
+                <div className="app">
+                    <div className="left-column-chat-list">
                         <div className="chat-search">
                             <input type="text" placeholder="Search conversation..." />
                             <button id="send search">
@@ -164,9 +195,15 @@ function Chat({user, loggedUser}) {
                             </button>
                         </div>
                         <div className="chat-list">
-                            <div className="block">Friend Icon, Username, Text Preview, Date & Time</div>
+                            <div className="block">
+                                {contacts.map((contact, index) => (
+                                    <div key={index} className='contacts' onClick={() => handleContactClick(contact.recipientEmail)}>
+                                        <div>{contact.name}</div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                    </div> */}
+                    </div>
                     <div className="screen chat-screen active">
                         <div className="header">
                             <div className="logo">Messages Chat</div>
@@ -187,7 +224,7 @@ function Chat({user, loggedUser}) {
                         </div>
                     </div>
                     {/* <div className="bottom-filler"></div> */}
-                {/* </div> */}
+                </div>
             </div>
         </div>
     );
