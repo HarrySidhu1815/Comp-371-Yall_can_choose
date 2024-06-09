@@ -3,7 +3,6 @@ import io from 'socket.io-client';
 import './Chat.css';
 import logo from './searchIcon.png';
 
-
 const CONNECTION_PORT = 'http://localhost:1337';
 let socket;
 
@@ -12,35 +11,37 @@ function Chat({ user, loggedUser }) {
     const [username, setUsername] = useState(user);
     const [owner, setOwner] = useState();
     const [currentName, setcurrentName] = useState(loggedUser);
-    const [contacts, setContacts] = useState([])
-
-    fetch('http://localhost:1337/api/find-user-name', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email: username })
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            setOwner(data.name)
-        })
-        .catch(error => {
-            console.error('Error fetching user name:', error);
-        });
+    const [contacts, setContacts] = useState([]);
+    const [showContact, setShowContact] = useState(true);
 
     useEffect(() => {
+        fetch('http://localhost:1337/api/find-user-name', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: username })
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                setOwner(data.name);
+            })
+            .catch(error => {
+                console.error('Error fetching user name:', error);
+            });
+    }, [username]);
 
+    useEffect(() => {
         socket = io(CONNECTION_PORT);
         socket.on('connect', () => {
             console.log('Connected to server');
         });
-        socket.emit('setUserId', currentName)
+        socket.emit('setUserId', currentName);
         socket.on('connect_error', (error) => {
             console.error('Connection error:', error);
         });
@@ -52,7 +53,7 @@ function Chat({ user, loggedUser }) {
         return () => {
             socket.disconnect();
         };
-    }, [CONNECTION_PORT])
+    }, []);
 
     useEffect(() => {
         socket.on('receive', message => {
@@ -61,10 +62,8 @@ function Chat({ user, loggedUser }) {
     }, []);
 
     useEffect(() => {
-        // Function to fetch messages from the server
         const fetchMessages = async () => {
             try {
-                // Make a request to retrieve messages
                 const response = await fetch('http://localhost:1337/api/retrieve-messages', {
                     method: 'POST',
                     credentials: 'include',
@@ -76,20 +75,12 @@ function Chat({ user, loggedUser }) {
                         currentName
                     }),
                 });
-                const data = response.json()
-                    .then(result => {
-                        const messages_array = result.messages
-                        const new_array = [];
-                        messages_array.map(message => {
-                            new_array.push({
-                                user: message.senderEmail,
-                                text: message.message
-                            })
-                        })
-                        setMessages(new_array)
-                    })
-                // Update state with the messages received from the server
-                // setMessages(result.messages)
+                const result = await response.json();
+                const messages_array = result.messages.map(message => ({
+                    user: message.senderEmail,
+                    text: message.message
+                }));
+                setMessages(messages_array);
             } catch (error) {
                 console.error('Error retrieving messages:', error);
             }
@@ -97,7 +88,6 @@ function Chat({ user, loggedUser }) {
 
         const fetchContacts = async () => {
             try {
-                // Make a request to retrieve messages
                 const response = await fetch('http://localhost:1337/api/retrieve-contacts', {
                     method: 'POST',
                     credentials: 'include',
@@ -108,23 +98,16 @@ function Chat({ user, loggedUser }) {
                         currentName
                     }),
                 });
-                const data = response.json()
-                    .then(result => {
-                        console.log(result)
-                        const contacts_array = result.contacts
-                        setContacts(contacts_array)
-                    })
-                // Update state with the messages received from the server
-                // setMessages(result.messages)
+                const result = await response.json();
+                setContacts(result.contacts);
             } catch (error) {
-                console.error('Error retrieving messages:', error);
+                console.error('Error retrieving contacts:', error);
             }
-        }
+        };
 
-        // Call the function to fetch messages when the component mounts
         fetchMessages();
         fetchContacts();
-    }, [username]);
+    }, [username, currentName]);
 
     const sendMessage = () => {
         const messageInput = document.getElementById('message-input');
@@ -132,11 +115,11 @@ function Chat({ user, loggedUser }) {
 
         if (message.length === 0) return;
 
-        renderMessage('my', {
-            username: currentName,
-            text: message
-        });
-        console.log(currentName, username, message)
+        setMessages(prevMessages => [
+            ...prevMessages,
+            { user: currentName, text: message }
+        ]);
+
         socket.emit('send', {
             currentUser: currentName,
             username: username,
@@ -146,24 +129,34 @@ function Chat({ user, loggedUser }) {
         messageInput.value = '';
     };
 
-    const renderMessage = (type, message) => {
-        const messageContainer = document.querySelector('.chat-screen .messages');
+    const handleContactClick = async (clickedUser) => {
+        setUsername(clickedUser);
+        setShowContact(false);
+        setMessages([]);  // Clear messages state when contact is changed
 
-        let el = document.createElement('div');
-        el.className = `message ${type === 'my' ? 'my-message' : 'other-message'}`;
-        el.innerHTML = `
-            <div>
-                <div class="name">${type === 'my' ? 'You' : message.user}</div>
-                <div class="text">${message.text}</div>
-            </div>
-        `;
-
-        messageContainer.appendChild(el);
-        messageContainer.scrollTop = messageContainer.scrollHeight - messageContainer.clientHeight;
+        try {
+            const response = await fetch('http://localhost:1337/api/retrieve-messages', {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: clickedUser,
+                    currentName
+                }),
+            });
+            const result = await response.json();
+            const messages_array = result.messages.map(message => ({
+                user: message.senderEmail,
+                text: message.message
+            }));
+            setMessages(messages_array);
+        } catch (error) {
+            console.error('Error retrieving messages:', error);
+        }
     };
-    const handleContactClick = (clickedUser) => {
-        setUsername(clickedUser)
-    }
+
     const handleMessageSend = () => {
         const message = document.getElementById('message-input').value;
         if (message.trim().length > 0) {
@@ -172,7 +165,7 @@ function Chat({ user, loggedUser }) {
     };
 
     const handleSocketMessage = (message) => {
-        setMessages(prevMessages => { [...prevMessages, message] });
+        setMessages(prevMessages => [...prevMessages, message]);
     };
 
     useEffect(() => {
@@ -186,28 +179,48 @@ function Chat({ user, loggedUser }) {
         <div className="chatwrap">
             <div className="chatapp">
                 <div className="app">
-                    {user == loggedUser ? (<>
-                        <div className="left-column-chat-list">
-                        <div className="chat-search">
-                            <input type="text" placeholder="Search conversation..." />
-                            <button id="send search">
-                                <img src={logo} width="15" height="15" />
-                            </button>
-                        </div>
-                        <div className="chat-list">
-                            <div  className='contactList'>
-                                {contacts.map((contact, index) => (
-                                    
-                                        <div key={index} className='contacts' onClick={() => handleContactClick(contact.recipientEmail)}>{contact.name}</div>
-                    
-                                ))}
+                    {user === loggedUser ? (
+                        <>
+                            <div className="left-column-chat-list">
+                                <div className="chat-search">
+                                    <input type="text" placeholder="Search conversation..." />
+                                    <button id="send search">
+                                        <img src={logo} width="15" height="15" />
+                                    </button>
                                 </div>
-                        </div>
-                    </div>
-                    </>) : <></>}
+                                <div className="chat-list">
+                                    <div className='contactList'>
+                                        {contacts.map((contact, index) => (
+                                            <div key={index} className='contacts' onClick={() => handleContactClick(contact.recipientEmail)}>{contact.name}</div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    ) : null}
                     <div className="screen chat-screen active">
                         <div className="header">
                             <div className="logo">Messages Chat</div>
+                            {user === loggedUser ? (
+                                <>
+                                    <span className='mobMenu material-symbols-rounded contactIcon' alt='Menu' onClick={() => setShowContact(!showContact)}>Contacts </span>
+                                    <div className='contactMenu left-column-chat-list' style={{ display: showContact ? 'flex' : 'none' }}>
+                                        <div className="chat-search">
+                                            <input type="text" placeholder="Search conversation..." />
+                                            <button id="send search">
+                                                <img src={logo} width="15" height="15" />
+                                            </button>
+                                        </div>
+                                        <div className="chat-list">
+                                            <div className='contactList'>
+                                                {contacts.map((contact, index) => (
+                                                    <div key={index} className='contacts' onClick={() => handleContactClick(contact.recipientEmail)}>{contact.name}</div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : null}
                         </div>
                         <div className="messages">
                             {messages.map((message, index) => (
@@ -224,7 +237,6 @@ function Chat({ user, loggedUser }) {
                             <button id="send-message" onClick={handleMessageSend}>Send</button>
                         </div>
                     </div>
-                    {/* <div className="bottom-filler"></div> */}
                 </div>
             </div>
         </div>

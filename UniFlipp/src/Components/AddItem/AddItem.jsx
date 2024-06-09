@@ -22,11 +22,8 @@ function AddItem() {
         )
 
         const userData = await response.json()
-        console.log(userData)
         if(userData.valid){
           setName(userData.email)
-          console.log(name)
-          console.log(userData.email)
         } else{
           navigate('/login')
         }
@@ -55,7 +52,6 @@ function AddItem() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData)
       const data = new FormData();
       data.append('itemType', formData.itemType);
       data.append('condition', formData.condition);

@@ -131,7 +131,7 @@
     width: 100%;
     height: calc(100% - 135px);
     background-color: #73a3fc86;
-    overflow: auto;
+    overflow: scroll;
 }
 
 .chat-screen .messages .message {
@@ -210,4 +210,25 @@
     width: 100%;
     background-color: #002b59; /* Blue color for the bottom filler */
     max-height: 9.9%;
+}
+.contactIcon{
+    color: white;
+    font-size: 2rem;
+}
+.contactMenu{
+    position: absolute;
+    top: 0rem;
+    right: 0;
+    z-index: 2;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    min-width: 15rem;
+    background-color: #fff;
+  }
+@media screen and (max-width:720px){
+    .left-column-chat-list{
+        display: none;
+    }
 }
