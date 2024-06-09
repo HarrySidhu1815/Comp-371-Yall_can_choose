@@ -1,3 +1,4 @@
+require("dotenv").config()
 const express = require('express');
 const cors = require('cors')
 const mongoose = require('mongoose')
@@ -14,6 +15,7 @@ const Message = require('./models/messages.model.js')
 
 
 const allowedOrigin = 'http://localhost:5173';
+const PORT = process.env.PORT || 1337
 
 app.use(cors({
   origin: allowedOrigin,
@@ -36,7 +38,7 @@ app.use(session({
 }));
 
 
-mongoose.connect('mongodb://localhost:27017/SignIn', {
+mongoose.connect(process.env.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
   })
@@ -319,8 +321,8 @@ app.post('/api/find-user-name', async (req, res) => {
       res.status(500).json({ error: 'Server error' });
   }
 });
-const server = app.listen(1337, ()=>{
-    console.log('Server is listening on port 1337')
+const server = app.listen(PORT, ()=>{
+    console.log(`Server is listening on port ${PORT}`)
 })
 const io = require('socket.io')(server, {
   cors: {
