@@ -42,7 +42,7 @@ app.use(session({
 }));
 
 
-mongoose.connect(process.env.MONGODB_URI, {
+mongoose.connect('mongodb://localhost:27017/', {
   })
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.log(err));
@@ -56,8 +56,6 @@ const checkLoggedIn = (req, res, next) => {
       res.status(401).json({ message: 'Unauthorized' });
   }
 };
-
-
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
