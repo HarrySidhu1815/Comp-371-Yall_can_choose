@@ -37,6 +37,7 @@ app.use(session({
   cookie: {
     path    : '/',
     httpOnly: false,
+    secure: process.env.NODE_ENV === 'production',
     maxAge  : 24*60*60*1000
   },
 }));
@@ -92,7 +93,8 @@ app.post('/api/login', async (req, res) =>{
     if(user){
       req.session.email = user.email;
       req.session.name = user.name;
-
+      console.log('User logged in:', req.session);
+      
         const token = jwt.sign({
             name: user.name,
             email: user.email,
