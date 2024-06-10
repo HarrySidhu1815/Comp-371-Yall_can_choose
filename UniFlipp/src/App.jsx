@@ -25,7 +25,7 @@ function App() {
       <div>
 
         <header>
-          <img className='logo' src="/src/assets/logoimage.png" alt="Logo" width="100" height="50" />
+          <img className='logo' src="/images/logoimage.png" alt="Logo" width="100" height="50" />
           <h3>UniFlip</h3>
           <span className='mobMenu material-symbols-rounded menuicon1' alt='Menu' onClick={() => setShowMenu(!showMenu)}>menu </span>
           <div className='navMenu' style={{ 'display': showMenu ? 'flex' : 'none' }}>

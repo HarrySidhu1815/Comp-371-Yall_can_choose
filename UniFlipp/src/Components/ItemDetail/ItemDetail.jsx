@@ -47,7 +47,7 @@ const ItemDetail = () => {
         </div>
         <div className="item-details-content">
           <div className="item-image">
-            <img src={`http://localhost:5173/src/images/${item.image}`} alt="Item" />
+            <img src={`/images/${item.image}`} alt="Item" />
           </div>
 
           <div className="item-info">
