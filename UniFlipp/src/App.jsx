@@ -12,7 +12,6 @@ import Login from './Components/Login/Login'
 import AddItem from './Components/AddItem/AddItem'
 import Logout from './Components/LogOut/Logout'
 import ItemDetails from './Components/ItemDetail/ItemDetail'
-import menu from './assets/menu.png'
 
 function App() {
   const [isNavOpen, setIsNavOpen] = useState(false)

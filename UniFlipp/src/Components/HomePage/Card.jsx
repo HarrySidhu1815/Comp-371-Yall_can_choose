@@ -23,7 +23,7 @@ const Card = ({type, location, price, image, isDelete, id, onDelete, owner}) => 
       };
     return (
         <div className="card">
-            <img src={`src/images/${image}`} alt='Item' />
+            <img src={`/images/${image}`} alt='Item' />
             <div className="card-content">
             <Link to={`/item/${id}`}>
                 <div className="book-title">{type}</div>

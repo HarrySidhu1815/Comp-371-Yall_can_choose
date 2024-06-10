@@ -59,7 +59,7 @@ const checkLoggedIn = (req, res, next) => {
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../UniFlipp/src/images/')
+    cb(null, '../UniFlipp/public/images/')
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + '-' + file.originalname)
