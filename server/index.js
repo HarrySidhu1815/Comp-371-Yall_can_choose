@@ -12,6 +12,7 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const socket = require('socket.io');
 const Message = require('./models/messages.model.js')
+const MemoryStore = require('memorystore')(session)
 
 
 const allowedOrigin = 'http://localhost:5173';
