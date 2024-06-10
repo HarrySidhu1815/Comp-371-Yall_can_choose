@@ -3,12 +3,11 @@ import io from 'socket.io-client';
 import './Chat.css';
 import logo from './searchIcon.png';
 
-const CONNECTION_PORT = serverurl;
+const CONNECTION_PORT = import.meta.env.VITE_SERVER_URL;
 let socket;
 
 function Chat({ user, loggedUser }) {
     const serverurl = import.meta.env.VITE_SERVER_URL
-
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState(user);
     const [owner, setOwner] = useState();

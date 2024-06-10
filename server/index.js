@@ -86,10 +86,6 @@ app.post('/api/register', async (req, res) =>{
     }
 })
 
-app.use('*', (req, res) => {
-  res.status(404).json({ error: 'Not Found' });
-});
-
 app.post('/api/login', async (req, res) =>{
     const user = await User.findOne({
         email: req.body.email,
@@ -325,6 +321,11 @@ app.post('/api/find-user-name', async (req, res) => {
       res.status(500).json({ error: 'Server error' });
   }
 });
+
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
+
 const server = app.listen(PORT, ()=>{
     console.log(`Server is listening on port ${PORT}`)
 })
