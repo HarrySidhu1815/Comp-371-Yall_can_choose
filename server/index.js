@@ -30,6 +30,7 @@ app.use(session({
   secret: 'secret123',
   resave: true,
   saveUninitialized: true,
+  store: new session.MemoryStore(),
   cookie: {
     path    : '/',
     httpOnly: false,
@@ -39,8 +40,6 @@ app.use(session({
 
 
 mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
   })
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.log(err));
