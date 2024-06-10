@@ -7,4 +7,7 @@ export default defineConfig({
   plugins: [
     nodePolyfills(),
   ],
+  build: {
+    chunkSizeWarningLimit: 500 // Set limit to 1000 kB
+  }
 })
