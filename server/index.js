@@ -86,7 +86,9 @@ app.post('/api/register', async (req, res) =>{
     }
 })
 
-
+app.use('*', (req, res) => {
+  res.status(404).json({ error: 'Not Found' });
+});
 
 app.post('/api/login', async (req, res) =>{
     const user = await User.findOne({
