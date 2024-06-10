@@ -15,7 +15,7 @@ const Message = require('./models/messages.model.js')
 const MemoryStore = require('memorystore')(session)
 
 
-const allowedOrigin = 'http://localhost:5173';
+const allowedOrigin = 'https://comp-371-yall-can-choose-1.onrender.com';
 const PORT = process.env.PORT || 1337
 
 app.use(cors({
@@ -329,7 +329,7 @@ const server = app.listen(PORT, ()=>{
 })
 const io = require('socket.io')(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://comp-371-yall-can-choose-1.onrender.com",
     methods: ["GET", "POST"]
   }
 });
