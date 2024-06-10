@@ -14,11 +14,13 @@ export default defineConfig({
     })
   ],
   build: {
-    chunkSizeWarningLimit: 500, // Increased limit to 1000 kB
+    chunkSizeWarningLimit: 1000, // Increased limit to 1000 kB
     rollupOptions: {
       output: {
-        manualChunks: {
-          lodash: ['lodash']
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            return id.toString().split('node_modules/')[1].split('/')[0].toString();
+          }
         }
       }
     }
