@@ -30,7 +30,9 @@ app.use(session({
   secret: 'secret123',
   resave: true,
   saveUninitialized: true,
-  store: new session.MemoryStore(),
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
   cookie: {
     path    : '/',
     httpOnly: false,
