@@ -7,10 +7,11 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const serverurl = import.meta.env.VITE_SERVER_URL
 
   async function loginUser(e) {
     e.preventDefault();
-    const response = await fetch('http://localhost:1337/api/login', {
+    const response = await fetch(`${serverurl}/api/login`, {
       method: 'POST',
       credentials: 'include',
       headers: {

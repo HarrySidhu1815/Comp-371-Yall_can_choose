@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 
 function Logout() {
   const navigate = useNavigate();
+  const serverurl = import.meta.env.VITE_SERVER_URL
 
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:1337/api/logout', {
+      const response = await fetch(`${serverurl}/api/logout`, {
         method: 'POST',
         credentials: 'include', // Include credentials (cookies) in the request
       });

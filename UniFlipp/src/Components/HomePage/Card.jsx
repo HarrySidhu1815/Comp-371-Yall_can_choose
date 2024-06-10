@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 
 const Card = ({type, location, price, image, isDelete, id, onDelete, owner}) => {
 
+  const serverurl = import.meta.env.VITE_SERVER_URL
+
     const handleDelete = async () => {
         try {
-          await fetch(`http://localhost:1337/api/delete-item/${id}`, {
+          await fetch(`${serverurl}/api/delete-item/${id}`, {
             method: 'GET',
             credentials: 'include',
             headers: {

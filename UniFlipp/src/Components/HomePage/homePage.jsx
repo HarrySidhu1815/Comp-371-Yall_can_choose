@@ -5,9 +5,10 @@ import Card from './Card';
 
 function HomePage() {
     const navigate = useNavigate()
+    const serverurl = import.meta.env.VITE_SERVER_URL
 
     async function populateQuotes(){
-        const req = await fetch('http://localhost:1337/api/quote', {
+        const req = await fetch(`${serverurl}/api/quote`, {
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }
@@ -37,7 +38,7 @@ const [totalPages, setTotalPages] = useState(0);
 
 const fetchAllItems = () => {
   const fetchItems = async () => {
-    const result = await fetch('http://localhost:1337/api/get-items', {
+    const result = await fetch(`${serverurl}/api/get-items`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -63,7 +64,7 @@ const fetchAllItems = () => {
   }, [items, itemsPerPage]);
 
     const fetchUserItems = async () => {
-      const result = await fetch('http://localhost:1337/api/get-user-items', {
+      const result = await fetch(`${serverurl}/api/get-user-items`, {
         method: 'POST',
         credentials: 'include',
         headers: {

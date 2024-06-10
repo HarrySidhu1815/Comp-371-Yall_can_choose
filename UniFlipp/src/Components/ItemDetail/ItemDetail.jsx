@@ -9,11 +9,13 @@ const ItemDetail = () => {
   const [item, setItem] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentName, setCurrentName] = useState(null);
+  const serverurl = import.meta.env.VITE_SERVER_URL
+
 
   useEffect(() => {
     const fetchItem = async () => {
       try {
-        const response = await fetch(`http://localhost:1337/item/${id}`, {
+        const response = await fetch(`${serverurl}/item/${id}`, {
           method: 'GET',
           credentials: 'include',
           withCredentials: true

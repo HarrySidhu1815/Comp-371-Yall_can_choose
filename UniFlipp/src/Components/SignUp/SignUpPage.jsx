@@ -9,10 +9,11 @@ function SignUpPage() {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const serverurl = import.meta.env.VITE_SERVER_URL
 
     async function registerUser(e) {
         e.preventDefault();
-        const response = await fetch('http://localhost:1337/api/register', {
+        const response = await fetch(`${serverurl}/api/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

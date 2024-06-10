@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 function AddItem() {
   const [name, setName] = useState('')
   const navigate = useNavigate()
-
+  const serverurl = import.meta.env.VITE_SERVER_URL
   
   useEffect(() => {
     // Fetch user data from server and set it in form data
     const fetchUserData = async () => {
       try {
-        const response = await fetch('http://localhost:1337/api/add', {
+        const response = await fetch(`${serverurl}/api/add`, {
           method: 'POST',
           credentials: 'include',
           withCredentials: true // Send cookies along with the request
@@ -61,7 +61,7 @@ function AddItem() {
       data.append('userEmail', formData.userEmail);
       data.append('image', formData.image);
       
-      const response = await axios.post('http://localhost:1337/api/add-item', data, {
+      const response = await axios.post(`${serverurl}/api/add-item`, data, {
         method: 'POST',
         headers: {
           'Content-type': 'multipart/form-data'

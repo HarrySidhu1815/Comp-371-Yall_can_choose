@@ -3,10 +3,12 @@ import io from 'socket.io-client';
 import './Chat.css';
 import logo from './searchIcon.png';
 
-const CONNECTION_PORT = 'http://localhost:1337';
+const CONNECTION_PORT = serverurl;
 let socket;
 
 function Chat({ user, loggedUser }) {
+    const serverurl = import.meta.env.VITE_SERVER_URL
+
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState(user);
     const [owner, setOwner] = useState();
@@ -15,7 +17,7 @@ function Chat({ user, loggedUser }) {
     const [showContact, setShowContact] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:1337/api/find-user-name', {
+        fetch(`${serverurl}/api/find-user-name`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -64,7 +66,7 @@ function Chat({ user, loggedUser }) {
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await fetch('http://localhost:1337/api/retrieve-messages', {
+                const response = await fetch(`${serverurl}/api/retrieve-messages`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
@@ -88,7 +90,7 @@ function Chat({ user, loggedUser }) {
 
         const fetchContacts = async () => {
             try {
-                const response = await fetch('http://localhost:1337/api/retrieve-contacts', {
+                const response = await fetch(`${serverurl}/api/retrieve-contacts`, {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
@@ -135,7 +137,7 @@ function Chat({ user, loggedUser }) {
         setMessages([]);  // Clear messages state when contact is changed
 
         try {
-            const response = await fetch('http://localhost:1337/api/retrieve-messages', {
+            const response = await fetch(`${serverurl}/api/retrieve-messages`, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
