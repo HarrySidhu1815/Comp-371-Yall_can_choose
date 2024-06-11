@@ -25,7 +25,7 @@ function Login() {
 
     const data = await response.json();
     if (data.user) {
-      alert('Login Successful');
+      alert(`Login Successful ${data.email}`);
       navigate('/add')
     } else {
       alert('Please try again! Check your username and password');
