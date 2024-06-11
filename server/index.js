@@ -28,10 +28,11 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.set('trust proxy', 1);
+
 app.use(session({
   secret: 'secret123',
-  resave: true,
-  saveUninitialized: true,
+  resave: false,
+  saveUninitialized: false,
   store: new MemoryStore({
     checkPeriod: 86400000 // prune expired entries every 24h
   }),
@@ -52,10 +53,11 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 // Middleware to check if user is logged in
 const checkLoggedIn = (req, res, next) => {
-  if (req.session.userId) {
-      next();
+  console.log('Checking if user is logged in:', req.session);
+  if (req.session.email) {
+    next();
   } else {
-      res.status(401).json({ message: 'Unauthorized' });
+    res.status(401).json({ message: 'Unauthorized' });
   }
 };
 
