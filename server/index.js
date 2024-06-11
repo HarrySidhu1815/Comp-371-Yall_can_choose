@@ -13,7 +13,12 @@ const app = express();
 const socket = require('socket.io');
 const Message = require('./models/messages.model.js')
 const MemoryStore = require('memorystore')(session)
+const MongoSessionStore = require('connect-mongodb-session')(session);
 
+const MongoDBStore = new MongoSessionStore({
+  uri: process.env.MONGODB_URL,
+  collection: 'sessions',
+});
 
 const allowedOrigin = 'https://comp-371-yall-can-choose-1.onrender.com';
 const PORT = process.env.PORT || 1337
@@ -33,12 +38,10 @@ app.use(session({
   secret: 'secret123',
   resave: false,
   saveUninitialized: false,
-  store: new MemoryStore({
-    checkPeriod: 86400000 // prune expired entries every 24h
-  }),
+  store: MongoDBStore,
   cookie: {
     path    : '/',
-    httpOnly: false,
+    httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     maxAge  : 24*60*60*1000
   },
