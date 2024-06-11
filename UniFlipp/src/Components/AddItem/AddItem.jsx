@@ -15,7 +15,6 @@ function AddItem() {
         const response = await fetch(`${serverurl}/api/add`, {
           method: 'POST',
           credentials: 'include',
-          withCredentials: true // Send cookies along with the request
         })
         .catch(err =>
           console.log(err)
@@ -38,7 +37,7 @@ function AddItem() {
     };
 
     fetchUserData();
-  }, [name]);
+  }, [navigate, serverurl]);
 
   const [formData, setFormData] = useState({
     itemType: '',
@@ -63,6 +62,7 @@ function AddItem() {
       
       const response = await axios.post(`${serverurl}/api/add-item`, data, {
         method: 'POST',
+        withCredentials: true,
         headers: {
           'Content-type': 'multipart/form-data'
         }
