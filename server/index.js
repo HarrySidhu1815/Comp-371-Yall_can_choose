@@ -27,6 +27,7 @@ app.use(cors({
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.set('trust proxy', 1);
 app.use(session({
   secret: 'secret123',
   resave: true,
@@ -94,7 +95,7 @@ app.post('/api/login', async (req, res) =>{
       req.session.email = user.email;
       req.session.name = user.name;
       console.log('User logged in:', req.session);
-      
+
         const token = jwt.sign({
             name: user.name,
             email: user.email,
