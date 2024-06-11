@@ -16,7 +16,7 @@ const MemoryStore = require('memorystore')(session)
 const MongoSessionStore = require('connect-mongodb-session')(session);
 
 const MongoDBStore = new MongoSessionStore({
-  uri: process.env.MONGODB_URL,
+  uri: process.env.MONGODB_URI,
   collection: 'sessions',
 });
 
