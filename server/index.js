@@ -9,16 +9,11 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
-const app = express();
+const MongoStore = require('connect-mongo');
 const socket = require('socket.io');
 const Message = require('./models/messages.model.js')
-const MemoryStore = require('memorystore')(session)
-const MongoSessionStore = require('connect-mongodb-session')(session);
 
-const MongoDBStore = new MongoSessionStore({
-  uri: process.env.MONGODB_URI,
-  collection: 'sessions',
-});
+const app = express();
 
 const allowedOrigin = 'https://comp-371-yall-can-choose-1.onrender.com';
 const PORT = process.env.PORT || 1337
@@ -34,11 +29,21 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.set('trust proxy', 1);
 
+mongoose.connect(process.env.MONGODB_URI, {
+})
+.then(() => console.log('MongoDB Connected'))
+.catch(err => console.log(err));
+
 app.use(session({
   secret: 'secret123',
   resave: false,
   saveUninitialized: false,
-  store: MongoDBStore,
+  store: MongoStore.create({
+    mongoUrl: process.env.MONGODB_URI,
+    mongooseConnection: mongoose.connection,
+    collectionName: 'sessions',
+    ttl: 24 * 60 * 60 // 1 day
+  }),
   cookie: {
     path    : '/',
     httpOnly: true,
@@ -46,12 +51,6 @@ app.use(session({
     maxAge  : 24*60*60*1000
   },
 }));
-
-
-mongoose.connect(process.env.MONGODB_URI, {
-  })
-.then(() => console.log('MongoDB Connected'))
-.catch(err => console.log(err));
 
 
 // Middleware to check if user is logged in
