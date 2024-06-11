@@ -100,6 +100,7 @@ app.post('/api/login', async (req, res) =>{
     if(user){
       req.session.email = user.email;
       req.session.name = user.name;
+      req.session.save()
       console.log('User logged in:', req.session);
 
         const token = jwt.sign({
