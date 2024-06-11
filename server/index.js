@@ -36,7 +36,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 app.use(session({
   secret: 'secret123',
-  resave: false,
+  resave: true,
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
@@ -47,7 +47,7 @@ app.use(session({
   cookie: {
     path    : '/',
     httpOnly: true,
-    secure: false,
+    secure: process.env.NODE_ENV === 'production',
     maxAge  : 24*60*60*1000
   },
 }));
@@ -100,6 +100,7 @@ app.post('/api/login', async (req, res) => {
   if (user) {
     req.session.email = user.email;
     req.session.name = user.name;
+    req.session.save()
     console.log('User logged in:', req.session);
 
     req.session.save(err => {
