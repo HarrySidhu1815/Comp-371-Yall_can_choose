@@ -92,25 +92,30 @@ app.post('/api/register', async (req, res) =>{
     }
 })
 
-app.post('/api/login', async (req, res) =>{
-    const user = await User.findOne({
-        email: req.body.email,
-        password: req.body.password,
-    })
-    if(user){
-      req.session.email = user.email;
-      req.session.name = user.name;
-      req.session.save()
-      console.log('User logged in:', req.session);
+app.post('/api/login', async (req, res) => {
+  const user = await User.findOne({
+    email: req.body.email,
+    password: req.body.password,
+  });
+  if (user) {
+    req.session.email = user.email;
+    req.session.name = user.name;
+    console.log('User logged in:', req.session);
 
-        const token = jwt.sign({
-            name: user.name,
-            email: user.email,
-        }, 'secret123')
-        return res.json({status: 'ok', user: token})
-    } else{
-        return res.json({status: 'error', user: false})
-    }
+    req.session.save(err => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ status: 'error', message: 'Session save error' });
+      }
+      const token = jwt.sign({
+        name: user.name,
+        email: user.email,
+      }, 'secret123');
+      return res.json({ status: 'ok', user: token });
+    });
+  } else {
+    return res.json({ status: 'error', user: false });
+  }
 })
 
 const verifyToken = (req, res, next) => {
