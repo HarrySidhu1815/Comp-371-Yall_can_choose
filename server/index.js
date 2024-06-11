@@ -100,14 +100,13 @@ app.post('/api/login', async (req, res) =>{
     if(user){
       req.session.email = user.email;
       req.session.name = user.name;
-      console.log(req.session.email, req.session.name)
       console.log('User logged in:', req.session);
 
         const token = jwt.sign({
             name: user.name,
             email: user.email,
         }, 'secret123')
-        return res.json({status: 'ok', user: token, email: req.session.email})
+        return res.json({status: 'ok', user: token})
     } else{
         return res.json({status: 'error', user: false})
     }
@@ -122,7 +121,7 @@ const verifyToken = (req, res, next) => {
       next();
   });
 };
-app.post('/api/add', async (req, res) => {
+app.post('/api/add', checkLoggedIn, async (req, res) => {
   if(req.session.email){
     return res.json({status: 'ok', valid: true, email: req.session.email})
   } else {
