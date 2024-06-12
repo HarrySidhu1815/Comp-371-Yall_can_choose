@@ -54,16 +54,6 @@ app.use(session({
 }));
 
 
-// Middleware to check if user is logged in
-const checkLoggedIn = (req, res, next) => {
-  console.log('Checking if user is logged in:', req.session);
-  if (req.session.email) {
-    next();
-  } else {
-    res.status(401).json({ message: 'Unauthorized' });
-  }
-};
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, '../UniFlipp/public/images/')
@@ -119,6 +109,16 @@ app.post('/api/login', async (req, res) => {
   }
 })
 
+// Middleware to check if user is logged in
+const checkLoggedIn = (req, res, next) => {
+  console.log('Checking if user is logged in:', req.session);
+  if (req.session.email) {
+    next();
+  } else {
+    res.status(401).json({ message: 'Unauthorized' });
+  }
+};
+
 const verifyToken = (req, res, next) => {
   const token = req.headers.authorization;
   if (!token) return res.status(401).json({ error: 'Unauthorized' });
@@ -135,7 +135,6 @@ app.post('/api/add', checkLoggedIn, async (req, res) => {
     return res.json({status: 'error', valid: false})
   }
 })
-
 
 
 app.post('/api/add-item', upload.single('image'), async (req, res) => {
