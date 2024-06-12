@@ -101,7 +101,7 @@ app.post('/api/login', async (req, res) => {
     req.session.email = user.email;
     req.session.name = user.name;
     console.log('User logged in:', req.session);
-
+    
     req.session.save(err => {
       if (err) {
         console.error('Session save error:', err);
