@@ -15,6 +15,7 @@ function SignUpPage() {
         e.preventDefault();
         const response = await fetch(`${serverurl}/api/register`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },

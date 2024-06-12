@@ -9,6 +9,7 @@ function HomePage() {
 
     async function populateQuotes(){
         const req = await fetch(`${serverurl}/api/quote`, {
+          credentials: 'include',
             headers: {
                 'x-access-token': localStorage.getItem('token')
             }

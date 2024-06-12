@@ -18,6 +18,7 @@ function Chat({ user, loggedUser }) {
     useEffect(() => {
         fetch(`${serverurl}/api/find-user-name`, {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },
