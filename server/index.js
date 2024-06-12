@@ -29,12 +29,6 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.set('trust proxy', 1);
 
-app.use((req, res, next) => {
-  console.log(`Incoming request: ${req.method} ${req.url}`);
-  console.log('Session before handling request:', req.session);
-  console.log('Cookies:', req.cookies);
-  next();
-});
 
 mongoose.connect(process.env.MONGODB_URI, {
 })
@@ -98,7 +92,6 @@ app.post('/api/login', async (req, res) => {
   if (user) {
     req.session.email = user.email;
     req.session.name = user.name;
-    console.log('User logged in:', req.session);
     
     req.session.save(err => {
       if (err) {
@@ -135,7 +128,7 @@ const verifyToken = (req, res, next) => {
       next();
   });
 };
-app.post('/api/add', checkLoggedIn, async (req, res) => {
+app.post('/api/add', async (req, res) => {
   if(req.session.email){
     return res.json({status: 'ok', valid: true, email: req.session.email})
   } else {
@@ -162,7 +155,7 @@ app.post('/api/add-item', upload.single('image'), async (req, res) => {
       image: req.file ? req.file.filename : null,
       user: userEmail
     });
-    console.log(newItem)
+
     // Save the item to the database
     const savedItem = await newItem.save();
     res.json(savedItem);
@@ -205,7 +198,7 @@ app.post('/api/add-item', upload.single('image'), async (req, res) => {
       const userEmail = req.session.email; // Retrieve user's email from request body
 
       const items = await Item.find({ user: userEmail }); // Find items associated with the user's email
-      console.log(items)
+
       if(!req.session.email){
         res.json({itemData: items, status: false});
       } else{
@@ -286,7 +279,6 @@ app.post('/api/retrieve-messages', async (req, res) => {
 app.post('/api/retrieve-contacts', async (req, res) => {
   try {
     const currentUserEmail = req.body.currentName;
-    console.log(currentUserEmail)
     // Retrieve messages from MongoDB
     const contacts = await Message.aggregate([
       {
@@ -318,7 +310,6 @@ app.post('/api/retrieve-contacts', async (req, res) => {
         }
       }
     ]);
-    console.log(contacts)
     
     res.status(200).json({ contacts });
   } catch (error) {
@@ -365,7 +356,7 @@ io.on('connection', (socket) => {
   socket.on('setUserId', (userId) => {
     // Associate user ID with socket ID
     userSocketMap[userId] = socket.id;
-    console.log(userSocketMap[userId])
+
     console.log('User', userId, 'connected');
 });
 
