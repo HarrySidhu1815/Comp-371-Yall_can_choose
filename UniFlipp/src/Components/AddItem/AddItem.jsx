@@ -15,7 +15,9 @@ function AddItem() {
         const response = await fetch(`${serverurl}/api/add`, {
           method: 'POST',
           credentials: 'include',
-          'Content-Type': 'application/json'
+          headers: {
+            'Content-Type': 'application/json'
+          },
         })
         .catch(err =>
           console.log(err)
