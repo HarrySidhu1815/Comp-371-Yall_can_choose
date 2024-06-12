@@ -29,6 +29,12 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.set('trust proxy', 1);
 
+app.use((req, res, next) => {
+  console.log('Incoming request:', req.method, req.url);
+  console.log('Session before handling request:', req.session);
+  next();
+});
+
 mongoose.connect(process.env.MONGODB_URI, {
 })
 .then(() => console.log('MongoDB Connected'))
