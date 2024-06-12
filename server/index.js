@@ -19,7 +19,7 @@ const allowedOrigin = 'https://comp-371-yall-can-choose-1.onrender.com';
 const PORT = process.env.PORT || 1337
 
 app.use(cors({
-  origin: allowedOrigin,
+  origin: true,
   methods: ["POST", "GET"],
   credentials: true // Allow credentials (cookies) to be sent
 }));
@@ -30,8 +30,9 @@ app.use(cookieParser());
 app.set('trust proxy', 1);
 
 app.use((req, res, next) => {
-  console.log('Incoming request:', req.method, req.url);
+  console.log(`Incoming request: ${req.method} ${req.url}`);
   console.log('Session before handling request:', req.session);
+  console.log('Cookies:', req.cookies);
   next();
 });
 
