@@ -93,6 +93,7 @@ app.post('/api/login', async (req, res) => {
     req.session.email = user.email;
     req.session.name = user.name;
     console.log(req.session)
+    console.log(req.sessionID)
     
     req.session.save(err => {
       if (err) {
@@ -114,6 +115,7 @@ app.post('/api/login', async (req, res) => {
 // Middleware to check if user is logged in
 const checkLoggedIn = (req, res, next) => {
   console.log('Checking if user is logged in:', req.session);
+  console.log('Checking if user is logged in:', req.sessionID);
   if (req.session.email) {
     next();
   } else {
