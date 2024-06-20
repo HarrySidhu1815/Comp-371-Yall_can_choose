@@ -47,7 +47,6 @@ app.use(session({
     path    : '/',
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'same_site',
     maxAge  : 24*60*60*1000
   },
 }));
@@ -63,7 +62,10 @@ const storage = multer.diskStorage({
 });
 const upload = multer({  storage: storage });
 
-
+function isAuthenticated (req, res, next) {
+  if (req.session.user) next()
+  else next('route')
+}
 
 app.post('/api/register', async (req, res) =>{
     try{
@@ -90,6 +92,7 @@ app.post('/api/login', async (req, res) => {
   if (user) {
     req.session.email = user.email;
     req.session.name = user.name;
+    console.log(req.session)
     
     req.session.save(err => {
       if (err) {
@@ -100,6 +103,7 @@ app.post('/api/login', async (req, res) => {
         name: user.name,
         email: user.email,
       }, 'secret123');
+
       return res.json({ status: 'ok', user: token });
     });
   } else {
@@ -126,7 +130,7 @@ const verifyToken = (req, res, next) => {
       next();
   });
 };
-app.post('/api/add', async (req, res) => {
+app.post('/api/add', checkLoggedIn, async (req, res) => {
   if(req.session.email){
     return res.json({status: 'ok', valid: true, email: req.session.email})
   } else {
