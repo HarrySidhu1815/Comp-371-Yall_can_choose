@@ -46,7 +46,7 @@ app.use(session({
   cookie: {
     path    : '/',
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: false,
     maxAge  : 24*60*60*1000
   },
 }));
@@ -115,8 +115,10 @@ app.post('/api/login', async (req, res) => {
 // Middleware to check if user is logged in
 const checkLoggedIn = (req, res, next) => {
   console.log('Checking if user is logged in:', req.session);
-  console.log('Checking if user is logged in:', req.sessionID);
-  if (req.session.email) {
+  // console.log('Checking if user is logged in:', req.sessionID);
+  // console.log('email', req.session.email)
+  // console.log('jwt', token)
+  if (req.session) {
     next();
   } else {
     res.status(401).json({ message: 'Unauthorized' });
@@ -132,7 +134,7 @@ const verifyToken = (req, res, next) => {
       next();
   });
 };
-app.post('/api/add', checkLoggedIn, async (req, res) => {
+app.post('/api/add', async (req, res) => {
   if(req.session.email){
     return res.json({status: 'ok', valid: true, email: req.session.email})
   } else {
