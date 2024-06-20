@@ -8,6 +8,7 @@ const Item = require('./models/item.model.js')
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const session = require('express-session');
+const MongoDBStore = require("connect-mongodb-session")(session);
 const MongoStore = require('connect-mongo');
 const socket = require('socket.io');
 const Message = require('./models/messages.model.js')
@@ -16,6 +17,8 @@ const app = express();
 
 const allowedOrigin = 'https://comp-371-yall-can-choose-1.onrender.com';
 const PORT = process.env.PORT || 1337
+
+
 
 app.use(cors({
   origin: true,
@@ -29,20 +32,31 @@ app.set('trust proxy', 1);
 
 
 mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useCreateIndex: true
 })
 .then(() => console.log('MongoDB Connected'))
 .catch(err => console.log(err));
+
+const mongoDBstore = new MongoDBStore({
+  uri: process.env.MONGODB_URI,
+  collection: "sessions"
+});
+// Express Bodyparser
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use(session({
   secret: 'secret123',
   resave: false,
   saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI,
-    mongooseConnection: mongoose.connection,
-    collectionName: 'sessions',
-    ttl: 24 * 60 * 60 // 1 day
-  }),
+  // store: MongoStore.create({
+  //   mongoUrl: process.env.MONGODB_URI,
+  //   mongooseConnection: mongoose.connection,
+  //   collectionName: 'sessions',
+  //   ttl: 24 * 60 * 60 // 1 day
+  // }),
+  store: mongoDBstore,
   cookie: {
     path    : '/',
     httpOnly: true,
