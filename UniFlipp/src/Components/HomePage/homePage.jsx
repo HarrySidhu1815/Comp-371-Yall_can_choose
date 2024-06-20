@@ -79,9 +79,7 @@ const fetchAllItems = () => {
     const onDelete = (deletedItemId) => {
       setItems(items.filter((item) => item._id !== deletedItemId));
     };
-    // const onItemClick = (itemId) => {
-    //   navigate(`/item/${itemId}`);
-    // };
+
 
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
