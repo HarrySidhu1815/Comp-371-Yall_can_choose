@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './additem.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -63,9 +62,9 @@ function AddItem() {
       data.append('userEmail', formData.userEmail);
       data.append('image', formData.image);
       
-      const response = await axios.post(`${serverurl}/api/add-item`, data, {
+      const response = await fetch(`${serverurl}/api/add-item`, data, {
         method: 'POST',
-        withCredentials: true,
+        credentials: 'include',
         headers: {
           'Content-type': 'multipart/form-data'
         }
