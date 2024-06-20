@@ -8,7 +8,6 @@ const Item = require('./models/item.model.js')
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const session = require('express-session');
-const cookieParser = require('cookie-parser');
 const MongoStore = require('connect-mongo');
 const socket = require('socket.io');
 const Message = require('./models/messages.model.js')
@@ -26,7 +25,6 @@ app.use(cors({
 
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cookieParser());
 app.set('trust proxy', 1);
 
 
@@ -37,7 +35,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
 app.use(session({
   secret: 'secret123',
-  resave: true,
+  resave: false,
   saveUninitialized: false,
   store: MongoStore.create({
     mongoUrl: process.env.MONGODB_URI,
